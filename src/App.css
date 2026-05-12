@@ -1,0 +1,386 @@
+/* =========================================
+   1. 글로벌 설정 & 폰트 로드
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Nanum+Pen+Script&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f9f7f2;
+  overflow-x: hidden;
+  color: #333;
+}
+
+.App {
+  text-align: center;
+  font-family: 'Noto Serif KR', serif;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes floatText { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+.animate-fade { animation: fadeIn 0.8s ease-in; }
+.animate-pop { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+/* =========================================
+   2. 메인 페이지 (MainLayout)
+   ========================================= */
+.main-layout { padding: 80px 20px; max-width: 1000px; margin: 0 auto; }
+.main-title { font-size: 4rem; color: #8b0000; letter-spacing: 12px; font-weight: 900; margin-bottom: 15px; }
+.main-subtitle { color: #666; font-size: 1.2rem; margin-bottom: 40px; }
+
+.calendar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; max-width: 800px; margin: 0 auto; }
+.month-item { 
+  border: 1px solid #ddd; border-radius: 16px; padding: 30px; cursor: pointer; background: #fff;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+.month-item.active { border-color: #8b0000; background-color: #fff5f5; box-shadow: 0 10px 20px rgba(139, 0, 0, 0.1); }
+.month-item.locked { opacity: 0.4; cursor: not-allowed; }
+.month-item.active:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(139, 0, 0, 0.2); }
+
+.monument-link-btn {
+  margin-top: 30px; padding: 15px 30px; background: #333; color: #deff9a; border: 2px solid #deff9a;
+  border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s;
+}
+
+/* =========================================
+   3. 게임 플레이 (GameLayout)
+   ========================================= */
+.game-layout { height: 100vh; width: 100vw; background-size: cover; background-position: center; position: relative; }
+.game-overlay { height: 100%; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.85)); display: flex; flex-direction: column; justify-content: flex-end; padding: 60px 20px; }
+
+.story-box { 
+  background: rgba(255, 255, 255, 0.95); padding: 35px; border-radius: 20px; border-left: 10px solid #8b0000; 
+  text-align: left; font-size: 1.3rem; line-height: 1.8; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+}
+
+.fact-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px);
+  display: flex; justify-content: center; align-items: center; z-index: 1000;
+}
+.fact-box {
+  background: rgba(20, 20, 20, 0.9); width: 85%; max-width: 550px; padding: 50px 40px; border-radius: 5px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.15); text-align: center;
+}
+.fact-header { margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; }
+.fact-header h3 { font-size: 2rem; color: #ffffff; font-weight: 900; letter-spacing: 2px; }
+.fact-content { font-size: 1.25rem; line-height: 1.9; color: #ffffff; margin-bottom: 40px; word-break: keep-all; font-weight: 400; }
+
+.next-scene-btn {
+  padding: 18px 60px; background: #8b0000; color: #ffffff; border: none; border-radius: 2px; 
+  font-weight: 900; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+}
+.next-scene-btn:hover { background: #ffffff; color: #111111; transform: translateY(-3px); }
+
+.choice-group { display: flex; flex-direction: column; gap: 12px; }
+.choice-btn { padding: 22px; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+.choice-btn:hover { background: #fff; color: #000; }
+
+/* =========================================
+   4. 화면 꽉 채우는 일기장 (Full-Screen Diary)
+   ========================================= */
+.diary-full-page { width: 100vw; height: 100vh; background: #fdfaf1; display: flex; justify-content: center; overflow: hidden; }
+.diary-paper { 
+  background: #fdfaf1; width: 100%; height: 100%; padding: 80px 10%; 
+  display: flex; flex-direction: column; position: relative;
+  background-image: linear-gradient(#e5e5e5 1px, transparent 1px); background-size: 100% 3.5rem; line-height: 3.5rem; overflow-y: auto;
+}
+.diary-paper::before {
+  content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); opacity: 0.4; pointer-events: none; z-index: 1;
+}
+.diary-header { position: relative; z-index: 2; font-size: 2rem; color: #333; margin-bottom: 40px; border-bottom: 3px solid #8b0000; display: inline-block; text-align: left; }
+.diary-text { position: relative; z-index: 2; font-family: 'Nanum Pen Script', cursive; font-size: 2.3rem; line-height: 3.5rem; color: #2c2c2c; white-space: pre-wrap; text-align: left; }
+
+/* =========================================
+   5. 화면 꽉 채우는 독립신문 (Full-Screen Newspaper)
+   ========================================= */
+.result-layout { width: 100vw; height: 100vh; background-color: #d8cfbc; display: flex; justify-content: center; overflow: hidden; }
+.newspaper-container { 
+  background-color: #d8cfbc; background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+  width: 100%; height: 100%; padding: 60px 8%; overflow-y: auto; border: none; color: #000;
+}
+.newspaper-header { text-align: center; border-bottom: 5px solid #222; margin-bottom: 50px; padding-bottom: 20px; }
+.newspaper-header h1 { font-size: 6rem; font-weight: 900; letter-spacing: -2px; margin: 10px 0; }
+.header-top { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; }
+.article-headline { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 40px; text-align: center; border-top: 2px solid #222; border-bottom: 2px solid #222; padding: 25px 0; }
+.article-main-text { column-count: 3; column-gap: 60px; column-rule: 1px solid #b5a894; text-align: justify; line-height: 1.8; font-size: 1.25rem; }
+.article-content-text { white-space: pre-wrap; font-family: 'Noto Serif KR', serif; }
+.newspaper-footer { margin-top: 50px; padding-top: 30px; border-top: 3px double #222; text-align: center; }
+
+/* =========================================
+   6. 1:1 대화 페이지 (ChatPage)
+   ========================================= */
+.chat-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #111;
+  color: #fff;
+}
+
+.chat-header {
+  padding: 20px 30px;
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.chat-back {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #444;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.chat-info {
+  text-align: left;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  color: #888;
+  display: block;
+}
+
+.info-name {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.chat-window {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bubble {
+  max-width: 80%;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.bubble.ai {
+  align-self: flex-start;
+  background: #2a2a2a;
+  color: #efefef;
+  border-bottom-left-radius: 2px;
+}
+
+.bubble.user {
+  align-self: flex-end;
+  background: #8b0000;
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.text {
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.loading-bubble {
+  align-self: flex-start;
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+  padding-left: 10px;
+}
+
+.chat-input-box {
+  padding: 30px 10%;
+  background: #1a1a1a;
+  display: flex;
+  gap: 15px;
+  border-top: 1px solid #333;
+}
+
+.chat-input-box input {
+  flex: 1;
+  padding: 15px 20px;
+  background: #000;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.chat-input-box button {
+  padding: 0 30px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.chat-input-box button:hover {
+  background: #8b0000;
+  color: #fff;
+}
+
+/* =========================================
+   7. 디지털 태극기 기념비 (Monument)
+   ========================================= */
+.monument-page { width: 100vw; height: 100vh; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1b 100%); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+.mosaic-canvas { position: relative; width: 90%; max-width: 900px; height: 550px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; margin: 30px 0; overflow: hidden; }
+.mosaic-pixel { position: absolute; white-space: nowrap; animation: floatText 4s ease-in-out infinite; text-shadow: 0 0 10px currentColor; cursor: default; }
+
+/* =========================================
+   8. [수정] 영상 시청 레이어 (Theater Center Mode)
+   ========================================= */
+.video-reveal-layer {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.video-wrapper {
+  width: 90%;
+  max-width: 1000px;
+  height: 60vh;
+  border: 2px solid #333;
+  box-shadow: 0 0 50px rgba(139, 0, 0, 0.4);
+  margin-bottom: 40px;
+  background: #000;
+}
+
+.main-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.video-content-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* =========================================
+   9. 버튼 그룹 및 유틸리티
+   ========================================= */
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}
+
+.next-step-btn-dark, 
+.chat-trigger-btn, 
+.monument-go-btn, 
+.final-restart-btn,
+.video-trigger-btn {
+  background: #ffffff;
+  color: #111111;
+  border: none;
+  padding: 16px 35px;
+  font-size: 1rem;
+  font-weight: 900;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  text-decoration: none;
+}
+
+.chat-trigger-btn:hover, 
+.monument-go-btn:hover,
+.video-trigger-btn:hover {
+  background: #8b0000;
+  color: #ffffff;
+  transform: translateY(-5px);
+}
+
+.final-restart-btn {
+  background: #333333;
+  color: #ffffff;
+}
+
+.final-restart-btn:hover {
+  background: #ffffff;
+  color: #111111;
+}
+
+@media (max-width: 768px) {
+  .video-wrapper { height: 40vh; }
+  .button-group { flex-direction: column; gap: 12px; }
+  .chat-trigger-btn, .monument-go-btn, .final-restart-btn { width: 85%; }
+}
+
+.certificate-style-card {
+  background: #fdfaf1;
+  border: 4px double #d4af37;
+  padding: 30px;
+  border-radius: 5px;
+  text-align: center;
+  max-width: 450px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.tendency-badge-section {
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.badge-icon {
+  font-size: 3.5rem;
+  margin-bottom: 5px;
+}
+
+.tendency-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin: 5px 0;
+}
+
+.tendency-mini-desc {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.appointment-text {
+  font-family: 'Gungsuh', serif;
+  line-height: 1.6;
+  color: #333;
+  margin: 20px 0;
+  font-size: 0.95rem;
+}
+
+.reveal-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 3px solid #d4af37;
+  object-fit: cover;
+  margin: 10px 0;
+}

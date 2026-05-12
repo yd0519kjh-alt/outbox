@@ -1,0 +1,105 @@
+.deck-page-container {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: #121212;
+  color: white;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-header {
+  padding: 20px;
+  background: #1e1e1e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #ffd700;
+}
+
+.deck-count span {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.save-deck-btn {
+  background: #ffd700;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* 선택된 덱 바 */
+.selected-deck-bar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  background: #1a1a1a;
+}
+
+.mini-card {
+  width: 60px;
+  height: 80px;
+  background: #333;
+  border: 1px solid #555;
+  border-radius: 5px;
+  position: relative;
+}
+
+.mini-card img { width: 100%; height: 100%; object-fit: cover; }
+
+.mini-card.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #555;
+  font-size: 1.5rem;
+  border: 2px dashed #444;
+}
+
+/* 내 카드 리스트 그리드 */
+.my-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 15px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.select-card-item {
+  cursor: pointer;
+  text-align: center;
+}
+
+.card-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.select-card-item.is-selected .card-img-wrapper {
+  border-color: #ffd700;
+  box-shadow: 0 0 10px #ffd700;
+}
+
+.check-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255, 215, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  color: white;
+}
+
+.card-info .name { font-weight: bold; margin-top: 5px; font-size: 0.9rem; }
+.card-info .atk { font-size: 0.75rem; color: #aaa; }

@@ -1,0 +1,108 @@
+.minigame-hub-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 3000;
+  backdrop-filter: blur(8px);
+}
+
+.hub-window {
+  background: #121212; width: 90%; max-width: 900px; padding: 40px; border-radius: 30px;
+  border: 1px solid #333; box-shadow: 0 0 50px rgba(0,0,0,1); color: white; position: relative;
+}
+
+.hub-header { text-align: center; margin-bottom: 40px; }
+.title-badge { color: #ffd700; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 10px; }
+.close-x { position: absolute; right: 30px; top: 30px; background: none; border: none; color: #666; font-size: 2rem; cursor: pointer; }
+
+.game-selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+.mini-game-card {
+  background: #1e1e1e; padding: 40px 20px; border-radius: 20px; cursor: pointer;
+  transition: all 0.3s; border: 1px solid #222; text-align: center;
+}
+.mini-game-card:hover { 
+  background: #252525; transform: translateY(-10px); 
+  border-color: #ffd700; box-shadow: 0 10px 30px rgba(255,215,0,0.1); 
+}
+.card-icon { font-size: 3.5rem; margin-bottom: 20px; }
+
+/* 게임 내부 공통 디자인 */
+.game-play { text-align: center; min-height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+/* 자격루 타이밍 바 */
+.timing-bar-container {
+  width: 80%; height: 20px; background: #333; border-radius: 10px; position: relative; margin: 40px 0;
+}
+.target-center {
+  position: absolute; left: 40%; width: 20%; height: 100%; 
+  background: linear-gradient(to bottom, #ffd700, #b8860b); border-radius: 5px; box-shadow: 0 0 15px #ffd700;
+}
+.indicator { position: absolute; top: -15px; font-size: 1.5rem; transition: left 0.02s linear; }
+
+/* 혼천의 별마당 */
+.star-field { width: 400px; height: 250px; background: #0a0a1a; border-radius: 20px; position: relative; border: 1px solid #1a1a3a; margin-bottom: 20px; }
+.star-point { position: absolute; font-size: 2rem; cursor: pointer; filter: grayscale(1); transition: 0.3s; }
+.star-point.active { filter: grayscale(0); transform: scale(1.3); text-shadow: 0 0 20px #ffd700; }
+
+/* 측우기 빗물 */
+.rain-field { width: 100%; height: 200px; position: relative; background: linear-gradient(to bottom, #111, #1a1a2a); overflow: hidden; border-radius: 20px; margin-bottom: 20px; }
+.rain-bucket { position: absolute; bottom: 10px; font-size: 3rem; transform: translateX(-50%); transition: 0.05s; }
+.rain-drop { position: absolute; top: -50px; left: 50%; animation: fall 1.5s infinite; font-size: 1.5rem; }
+@keyframes fall { to { transform: translateY(250px); } }
+
+/* 성공 모달 */
+.win-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); border-radius: 30px; display: flex; justify-content: center; align-items: center; z-index: 10; }
+.win-content h1 { color: #ffd700; font-size: 3rem; margin-bottom: 20px; }
+.game-action-btn { padding: 15px 40px; background: #ffd700; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+
+/* 보상 모달 레이아웃 */
+.reward-modal {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 100; border-radius: 30px;
+}
+
+.reward-card {
+  width: 300px; background: #1a1a1a; border: 3px solid #ffd700;
+  border-radius: 20px; padding: 30px; text-align: center;
+  position: relative; box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+}
+
+.reward-glow {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 150%; height: 150%;
+  background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
+  z-index: -1; animation: rotateGlow 5s linear infinite;
+}
+
+.new-badge {
+  background: #ff4b2b; color: white; padding: 5px 15px;
+  border-radius: 50px; font-size: 0.8rem; font-weight: bold;
+}
+
+.invention-img-box {
+  width: 100%; height: 180px; margin: 20px 0;
+  background: #000; border-radius: 10px; overflow: hidden;
+  border: 1px solid #333;
+}
+.invention-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+.inv-power { color: #ffd700; font-weight: bold; font-family: 'Courier New', monospace; font-size: 1.2rem; }
+.inv-desc { font-size: 0.9rem; color: #ccc; margin: 15px 0; line-height: 1.4; }
+
+.confirm-btn {
+  width: 100%; padding: 15px; background: #ffd700; color: #000;
+  border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+}
+
+/* 등장 애니메이션 */
+.animate-pop { animation: popScale 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes popScale {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes rotateGlow {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}

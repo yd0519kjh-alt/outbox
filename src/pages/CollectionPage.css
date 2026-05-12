@@ -1,0 +1,505 @@
+.collection-container {
+  padding: 40px 20px;
+  background-color: #f5f3ef; /* 옛날 종이 느낌 배경 */
+  min-height: 100vh;
+  font-family: 'Nanum Myeongjo', serif;
+}
+
+.col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+}
+
+.col-title-group h2 {
+  font-size: 2rem;
+  color: #333;
+  margin: 0;
+}
+
+.col-count {
+  color: #8b0000;
+  font-weight: bold;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  perspective: 1000px; /* 3D 효과 거리 */
+}
+
+/* 카드 3D 셋팅 */
+.card-scene {
+  width: 280px;
+  height: 450px;
+  cursor: pointer;
+}
+
+.game-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.card-scene.is-flipped .game-card {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 2px solid #d1ccc0;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background-color: #fdfdfd;
+}
+
+/* 캐릭터 타입별 테두리 */
+.game-card.hero .card-face { border-color: #8b0000; }
+.game-card.villain .card-face { border-color: #333; }
+.game-card.support .card-face { border-color: #2e7d32; }
+
+/* 앞면 상세 요소 */
+.card-rank { font-weight: bold; color: #8b0000; margin-bottom: 10px; }
+.card-image-box {
+  width: 100%;
+  height: 180px;
+  background: #eee;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.char-img { width: 100%; height: 100%; object-fit: cover; }
+.card-name { text-align: center; margin: 15px 0; font-size: 1.5rem; }
+
+/* 능력치 그래프 */
+.card-stats { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.stat-row { display: flex; align-items: center; font-size: 12px; }
+.stat-label { width: 40px; }
+.bar-bg { flex: 1; height: 8px; background: #eee; border-radius: 4px; margin: 0 8px; overflow: hidden; }
+.bar { height: 100%; background: #c0392b; border-radius: 4px; }
+.stat-value { width: 25px; text-align: right; font-weight: bold; }
+
+/* 버튼 그룹 */
+.action-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+.chat-btn, .battle-btn {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.chat-btn { background: #2c3e50; color: white; }
+.battle-btn { background: #8b0000; color: white; }
+
+.flip-guide {
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+  margin-top: 15px;
+}
+
+/* 4컷 만화 그리드 스타일 추가 */
+.comic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 5px;
+  width: 100%;
+  height: 220px; /* 카드 크기에 맞춰 조절 */
+  background: #eee;
+  padding: 5px;
+  border-radius: 8px;
+  border: 2px solid #333;
+  margin-bottom: 15px;
+}
+
+.comic-panel {
+  position: relative;
+  background: white;
+  border: 1px solid #999;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.comic-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.panel-num {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.no-comic {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.card-desc-short {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #444;
+  margin-bottom: 15px;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* 세 줄만 보여주기 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 기존 버튼 스타일 유지 및 미세 조정 */
+.action-btn-group {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* 만화 크게 보기 모달 오버레이 */
+.comic-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85); /* 배경을 어둡게 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* 모든 요소보다 위에 */
+  padding: 20px;
+  backdrop-filter: blur(5px); /* 배경 블러 효과 */
+}
+
+/* 모달 컨텐츠 박스 */
+.comic-modal-content {
+  background: #fdfaf3; /* 고전적인 종이 느낌 색상 */
+  width: 95%;
+  max-width: 800px;
+  max-height: 90vh;
+  border-radius: 15px;
+  position: relative;
+  padding: 40px 20px 30px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  overflow-y: auto;
+}
+
+/* 모달 제목 */
+.modal-title {
+  text-align: center;
+  color: #8b0000;
+  margin-bottom: 25px;
+  font-family: 'GmarketSansBold', serif;
+}
+
+/* 크게 보는 4컷 그리드 */
+.modal-comic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2열 구조 */
+  gap: 15px;
+}
+
+.modal-panel {
+  position: relative;
+  border: 3px solid #333;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modal-panel img {
+  width: 100%;
+  display: block;
+}
+
+.panel-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+}
+
+/* 닫기 버튼 */
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 35px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* 마우스 커서 포인터 */
+.clickable {
+  cursor: zoom-in;
+}
+
+/* 모바일 대응: 세로로 길게 보기 */
+@media (max-width: 600px) {
+  .modal-comic-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 상단 탭 버튼 그룹 */
+.col-tabs {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.tab-btn {
+  padding: 10px 25px;
+  border: 1px solid #d4c4a8;
+  background: #fdfaf3;
+  font-family: 'GmarketSansBold', sans-serif;
+  cursor: pointer;
+  border-radius: 25px;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  background: #8b0000;
+  color: white;
+  border-color: #8b0000;
+  box-shadow: 0 4px 10px rgba(139, 0, 0, 0.3);
+}
+
+/* 발명품 카드 디자인 */
+.invention-card {
+  background: white;
+  border: 2px solid #e0d5c1;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.item-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  background: #f4ece1;
+  color: #8b0000;
+  font-size: 0.75rem;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.item-image-box {
+  background: #f9f9f9;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.item-image-box img {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+.item-effect {
+  color: #d35400;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.item-desc {
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* 애니메이션 */
+.animate-pop {
+  animation: pop 0.3s ease-out;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 하단 버튼 바 스타일 */
+.collection-footer-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-top: 2px solid #ffd700; /* 금색 테두리로 유희왕 느낌 추가 */
+  z-index: 100;
+}
+
+.footer-action-btn {
+  flex: 1;
+  max-width: 45%;
+  height: 45px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.footer-action-btn:active {
+  transform: scale(0.95);
+}
+
+.deck-build-btn {
+  background: #2c3e50;
+  color: #deff9a;
+  margin-right: 10px;
+}
+
+.battle-arena-btn {
+  background: linear-gradient(to right, #e74c3c, #c0392b);
+  color: white;
+}
+
+.battle-arena-btn:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* 덱 포함 카드 표시 */
+.deck-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ffd700;
+  color: #000;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 5;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+}
+
+.card-scene.in-deck .game-card {
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+/* 상단 탭 메뉴 스타일 */
+.tab-menu {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tab-btn {
+  padding: 10px 25px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.tab-btn.active {
+  background: #8b4513;
+  color: white;
+  border-color: #8b4513;
+  box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
+}
+
+/* 카드 공통 스타일 */
+.card-item.locked {
+  filter: grayscale(1) opacity(0.6);
+}
+
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.card-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex; justify-content: center; align-items: center;
+  font-size: 3rem;
+}
+
+/* 발명품 카드 전용 스타일 */
+.invention-card.owned {
+  border: 2px solid #ffd700;
+  background: linear-gradient(to bottom, #fffcf0, #fff);
+}
+
+.inv-name { color: #b8860b; margin-bottom: 5px; }
+.inv-power { font-size: 0.85rem; font-weight: bold; color: #e74c3c; margin-bottom: 5px; }
+.inv-desc { font-size: 0.8rem; color: #666; line-height: 1.4; }
+.inv-hint { font-size: 0.8rem; color: #999; font-style: italic; }

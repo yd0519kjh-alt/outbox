@@ -1,0 +1,139 @@
+.battle-arena-container {
+  height: 100vh;
+  /* 배경 이미지 대신 CSS 그라데이션 사용 (에러 원인 완벽 제거) */
+  background: radial-gradient(circle, #1e272e 0%, #050505 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 20px;
+  color: white;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.empty-state {
+  justify-content: center;
+  text-align: center;
+}
+
+.arena-side {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+/* LP 상태창 */
+.status-box { width: 260px; text-align: center; }
+.unit-name { font-weight: bold; margin-bottom: 8px; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+.lp-bar-bg { width: 100%; height: 16px; background: #222; border: 1px solid #444; border-radius: 10px; overflow: hidden; }
+.lp-bar-fill { height: 100%; transition: width 0.4s ease; }
+.lp-bar-fill.enemy { background: linear-gradient(90deg, #ff5e57, #ff3f34); }
+.lp-bar-fill.player { background: linear-gradient(90deg, #0fbcf9, #34e7e4); }
+.lp-text { font-size: 0.8rem; margin-top: 5px; color: #aaa; }
+
+/* 유희왕 스타일 카드 */
+.battle-card {
+  width: 160px;
+  height: 230px;
+  border: 3px solid #ffd700;
+  border-radius: 10px;
+  background: #111;
+  position: relative;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.battle-card img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 이미지가 없을 때 나올 임시 박스 */
+.card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  font-size: 3rem;
+  color: #444;
+}
+
+.card-stats {
+  position: absolute;
+  bottom: 0; width: 100%;
+  background: rgba(0,0,0,0.85);
+  color: #ffd700;
+  padding: 5px 0;
+  font-weight: bold;
+  text-align: center;
+  border-top: 1px solid #ffd700;
+}
+
+/* 중앙 정보창 */
+.battle-log-center { text-align: center; z-index: 5; }
+.vs-badge { font-size: 2.2rem; font-weight: 900; color: #ffd700; font-style: italic; margin-bottom: 15px; }
+.log-window { background: rgba(255,255,255,0.05); padding: 15px 30px; border-radius: 12px; border: 1px solid #333; min-width: 320px; }
+.log-text { font-size: 0.95rem; margin: 0; line-height: 1.5; color: #ddd; }
+
+/* 하단 버튼 */
+.battle-actions { display: flex; justify-content: center; gap: 20px; }
+.battle-btn { padding: 12px 35px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; border: none; transition: 0.2s; }
+.battle-btn.attack { background: #ff3f34; color: white; box-shadow: 0 4px 0 #bc1e1e; }
+.battle-btn.retreat { background: #485460; color: white; }
+.battle-btn.finish { background: #ffd700; color: black; width: 280px; }
+.battle-btn:active { transform: translateY(3px); box-shadow: none; }
+
+/* 애니메이션 */
+.animate-float { animation: float 3s infinite ease-in-out; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.animate-up { animation: slideUp 0.4s ease-out; }
+@keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* 필살기 버튼 (황금색 그라데이션) */
+.battle-btn.special-skill {
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  color: #000;
+  font-weight: 900;
+  border: 2px solid #fff;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.battle-btn.special-skill.disabled {
+  background: #333;
+  color: #666;
+  border: 1px solid #444;
+  box-shadow: none;
+  animation: none;
+  cursor: not-allowed;
+}
+
+/* 발명품 선택 레이아웃 */
+.invention-selector {
+  background: rgba(0,0,0,0.85);
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid #ffd700;
+  text-align: center;
+}
+
+.inv-button-grid {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.inv-select-btn {
+  padding: 10px 20px;
+  background: #ffd700;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); }
+  100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+}
